@@ -28,4 +28,13 @@ public class Problem {
     public void setToId(int to_id) {
         this.toId = to_id;
     }
+
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "id=" + id +
+                ", fromId=" + fromId +
+                ", toId=" + toId +
+                '}';
+    }
 }

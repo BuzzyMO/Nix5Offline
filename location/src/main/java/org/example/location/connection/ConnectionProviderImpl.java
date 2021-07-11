@@ -9,8 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionProviderImpl  implements ConnectionProvider{
-
-    public Connection getConnection() throws SQLException{
+    public Connection getConnection() throws SQLException {
         Properties properties = loadProperties();
         String url = properties.getProperty("url");
         String username = properties.getProperty("username");

@@ -43,14 +43,14 @@ public class ShortestPathServiceImpl implements ShortestPathService {
     }
 
     private int computeCost(Problem p) {
-        List<Node> nodes = createNodes(locations);
+        List<Node> nodes = createNodes();
         Dijkstra dijkstra = new Dijkstra(nodes, routes);
         Node start = getNodeByLocationId(nodes, p.getFromId());
         Node end = getNodeByLocationId(nodes, p.getToId());
         return dijkstra.minimalCost(start, end);
     }
 
-    private List<Node> createNodes(List<Location> locations){
+    private List<Node> createNodes(){
         List<Node> nodes = new ArrayList<>();
         for(Location l : locations){
             Node node = new Node(l);

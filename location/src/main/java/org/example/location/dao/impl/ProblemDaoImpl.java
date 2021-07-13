@@ -20,7 +20,9 @@ public class ProblemDaoImpl implements ProblemDao {
     @Override
     public List<Problem> readALl() {
         List<Problem> problemList = new ArrayList<>();
-        String sqlQuery = "SELECT * FROM problems";
+        String sqlQuery = "SELECT p.id, p.from_id, p.to_id " +
+                "FROM problems p LEFT JOIN solutions s on p.id = s.problem_id " +
+                "WHERE s.problem_id IS NULL;";
         try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
             ResultSet res = statement.executeQuery();
             while(res.next()){

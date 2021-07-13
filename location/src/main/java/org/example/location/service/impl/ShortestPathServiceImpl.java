@@ -21,7 +21,6 @@ public class ShortestPathServiceImpl implements ShortestPathService {
     private final List<Location> locations;
     private final List<Route> routes;
     private final List<Problem> problems;
-    private final List<Solution> solutions;
 
     public ShortestPathServiceImpl(LocationDao locationDao, RouteDao routeDao, ProblemDao problemDao, SolutionDao solutionDao){
         this.locationDao = locationDao;
@@ -31,19 +30,16 @@ public class ShortestPathServiceImpl implements ShortestPathService {
         locations = readAllLocations();
         routes = readAllRoutes();
         problems = readAllProblems();
-        solutions = readAllSolutions();
     }
 
     public void computeProblems(){
         List<Solution> solutions = new ArrayList<>();
         for (Problem p: problems) {
-            if(!problemIsSolved(p)){
-                int cost = computeCost(p);
-                Solution solution = new Solution();
-                solution.setProblemId(p.getId());
-                solution.setCost(cost);
-                solutions.add(solution);
-            }
+            int cost = computeCost(p);
+            Solution solution = new Solution();
+            solution.setProblemId(p.getId());
+            solution.setCost(cost);
+            solutions.add(solution);
         }
         createSolutions(solutions);
     }
@@ -74,15 +70,6 @@ public class ShortestPathServiceImpl implements ShortestPathService {
         throw new RuntimeException("Node isn't exists");
     }
 
-    private boolean problemIsSolved(Problem problem){
-        for(Solution solution : solutions) {
-            if(solution.getProblemId() == problem.getId()){
-                return true;
-            }
-        }
-        return false;
-    }
-
     private List<Location> readAllLocations(){
         return locationDao.readALl();
     }
@@ -93,10 +80,6 @@ public class ShortestPathServiceImpl implements ShortestPathService {
 
     private List<Problem> readAllProblems(){
         return problemDao.readALl();
-    }
-
-    private List<Solution> readAllSolutions(){
-        return solutionDao.readALl();
     }
 
     private void createSolutions(List<Solution> solutions){

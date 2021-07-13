@@ -18,55 +18,18 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
-    public void create(Solution solution) {
+    public void createSolutions(List<Solution> solutions) {
         String sqlQuery = "INSERT INTO solutions (problem_id, cost) VALUES (?, ?)";
         try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, solution.getProblemId());
-            statement.setInt(2, solution.getCost());
-            statement.executeUpdate();
-        } catch (SQLException ex){
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public void update(Solution solution) {
-        String sqlQuery = "UPDATE solutions SET cost=? WHERE problem_id=?";
-        try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, solution.getCost());
-            statement.setInt(2, solution.getProblemId());
-            statement.executeUpdate();
-        } catch (SQLException ex){
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public void delete(int id) {
-        String sqlQuery = "DELETE FROM solutions WHERE problem_id=?";
-        try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException ex){
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public Solution readById(int id) {
-        Solution solution = new Solution();
-        String sqlQuery = "SELECT * FROM solutions WHERE problem_id=?";
-        try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, id);
-            ResultSet res = statement.executeQuery();
-            if(res.next()){
-                solution.setProblemId(res.getInt(1));
-                solution.setCost(res.getInt(2));
+            for(Solution solution : solutions){
+                statement.setInt(1, solution.getProblemId());
+                statement.setInt(2, solution.getCost());
+                statement.addBatch();
             }
+            statement.executeBatch();
         } catch (SQLException ex){
             throw new RuntimeException(ex);
         }
-        return solution;
     }
 
     @Override

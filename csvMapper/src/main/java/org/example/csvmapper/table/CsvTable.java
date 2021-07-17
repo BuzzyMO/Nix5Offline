@@ -37,4 +37,8 @@ public class CsvTable implements Table{
         return Arrays.stream(header)
                 .collect(Collectors.toList());
     }
+
+    public int bodySize(){
+        return body.size();
+    }
 }

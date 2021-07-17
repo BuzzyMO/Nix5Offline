@@ -30,7 +30,11 @@ public class CsvMapper {
                     continue;
                 }
                 CsvColumn csvColumn = field.getAnnotation(CsvColumn.class);
+
                 String colName = csvColumn.colName();
+                if(!table.getHeader().contains(colName)){
+                    continue;
+                }
 
                 String value = table.get(numOfRow, colName);
                 Class<?> typeOfField = field.getType();

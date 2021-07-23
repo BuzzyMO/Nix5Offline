@@ -13,13 +13,19 @@ import java.util.List;
 public class CourseEntityManager {
 
     public void findAndPrintUpcomingLesson(EntityManager entityManager, Long studentId){
-        Student student = entityManager.find(Student.class, studentId);
-        Lesson upcomingLesson = getUpcomingLesson(student.getLessonRegistrations());
-        System.out.println("Upcoming Lesson \n" +
-                "Date and Time: " + upcomingLesson.getTimestamp() +"\n"+
-                "Topic: " + upcomingLesson.getTopic() + "\n" +
-                "Lecturer: " + upcomingLesson.getLecturer()
-                );
+        try{
+            entityManager.getTransaction().begin();
+            Student student = entityManager.find(Student.class, studentId);
+            Lesson upcomingLesson = getUpcomingLesson(student.getLessonRegistrations());
+            System.out.println("Upcoming Lesson \n" +
+                    "Date and Time: " + upcomingLesson.getTimestamp() +"\n"+
+                    "Topic: " + upcomingLesson.getTopic() + "\n" +
+                    "Lecturer: " + upcomingLesson.getLecturer());
+            entityManager.getTransaction().commit();
+        } catch (Exception ex){
+            entityManager.getTransaction().rollback();
+            throw new RuntimeException(ex);
+        }
 
     }
 

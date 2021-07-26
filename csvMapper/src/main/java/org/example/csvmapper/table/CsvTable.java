@@ -3,34 +3,30 @@ package org.example.csvmapper.table;
 import org.example.csvmapper.parser.CsvParser;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CsvTable implements Table{
     private final String[] header;
+    private final Map<String, Integer> headerMap;
     private final List<String[]> body;
 
     public CsvTable(CsvParser parser){
         header = parser.getHeader();
         body = parser.getBody();
+        headerMap = getHeaderMap(header);
     }
 
     public String get(int row, String colName){
-        int col = indexOfCol(colName);
-        return get(row, col);
+        int colIndex = headerMap.get(colName);
+        return get(row, colIndex);
     }
 
     public String get(int row, int col){
         String[] fullRow = body.get(row);
         return fullRow[col];
-    }
-
-    private int indexOfCol(String colName){
-        for (int i = 0; i < header.length; i++) {
-            if(header[i].equals(colName))
-                return i;
-        }
-        throw new IllegalArgumentException("Column doesn't exist: " + colName);
     }
 
     public List<String> getHeader(){
@@ -40,5 +36,13 @@ public class CsvTable implements Table{
 
     public int bodySize(){
         return body.size();
+    }
+
+    private Map<String, Integer> getHeaderMap(String[] header){
+        Map<String, Integer> headerMap = new HashMap<>();
+        for (int i = 0; i < header.length; i++) {
+            headerMap.put(header[i], i);
+        }
+        return headerMap;
     }
 }

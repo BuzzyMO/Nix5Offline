@@ -1,5 +1,7 @@
 package org.example.finance.model;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class CategoryType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NaturalId
     private String name;
 
     public Long getId() {

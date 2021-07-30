@@ -15,7 +15,7 @@ public class Category {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_type_id")
+    @JoinColumn(name = "category_type_id", nullable = false)
     @Access(AccessType.PROPERTY)
     private CategoryType categoryType;
 

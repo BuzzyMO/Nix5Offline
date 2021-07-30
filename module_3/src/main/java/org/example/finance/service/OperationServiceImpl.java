@@ -81,8 +81,10 @@ public class OperationServiceImpl implements OperationService {
     private List<OperationDto> getOperations(Long accountId, LocalDateTime fromTime, LocalDateTime toTime){
         List<OperationDto> operations = new ArrayList<>();
         Connection connection = connectionSupplier.get();
-        String query = "SELECT * FROM operations WHERE account_id = ? AND " +
-                "timestamp BETWEEN ? AND ?";
+        String query = "SELECT o.id, o.account_id, o.category_id, c.name, ct.name, o.money, o.timestamp " +
+                "FROM operations o INNER JOIN categories c on c.id = o.category_id " +
+                "INNER JOIN category_types ct on ct.id = c.category_type_id " +
+                "WHERE o.account_id = ? AND o.timestamp BETWEEN ? AND ?";
         try(PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, accountId);
             statement.setTimestamp(2, Timestamp.from(fromTime.toInstant(ZoneOffset.UTC)));
@@ -93,8 +95,10 @@ public class OperationServiceImpl implements OperationService {
                 operation.setId(res.getLong(1));
                 operation.setAccountId(res.getLong(2));
                 operation.setCategoryId(res.getLong(3));
-                operation.setMoney(res.getBigDecimal(4));
-                operation.setTimestamp(res.getTimestamp(5));
+                operation.setCategoryName(res.getString(4));
+                operation.setCategoryTypeName(res.getString(5));
+                operation.setMoney(res.getBigDecimal(6));
+                operation.setTimestamp(res.getTimestamp(7));
                 operations.add(operation);
             }
         } catch (SQLException ex) {
@@ -105,22 +109,26 @@ public class OperationServiceImpl implements OperationService {
     }
 
     private String[] headerCsv(){
-        String[] header = new String[5];
+        String[] header = new String[7];
         header[0] = "ID";
         header[1] = "Account ID";
         header[2] = "Category ID";
-        header[3] = "Money";
-        header[4] = "Timestamp";
+        header[3] = "Category Name";
+        header[4] = "Category Type";
+        header[5] = "Money";
+        header[6] = "Timestamp";
         return header;
     }
 
     private String[] operationToStringArray(OperationDto operation){
-        String[] strings = new String[5];
+        String[] strings = new String[7];
         strings[0] = String.valueOf(operation.getId());
         strings[1] = String.valueOf(operation.getAccountId());
         strings[2] = String.valueOf(operation.getCategoryId());
-        strings[3] = String.valueOf(operation.getMoney());
-        strings[4] = operation.getTimestamp().toString();
+        strings[3] = operation.getCategoryName();
+        strings[4] = operation.getCategoryTypeName();
+        strings[5] = String.valueOf(operation.getMoney());
+        strings[6] = operation.getTimestamp().toString();
         return strings;
     }
 }

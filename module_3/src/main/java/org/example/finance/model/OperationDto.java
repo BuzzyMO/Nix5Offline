@@ -9,6 +9,8 @@ public class OperationDto {
     private Long id;
     private Long accountId;
     private Long categoryId;
+    private String categoryName;
+    private String categoryTypeName;
     private BigDecimal money;
     private Timestamp timestamp;
 
@@ -50,5 +52,21 @@ public class OperationDto {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryTypeName() {
+        return categoryTypeName;
+    }
+
+    public void setCategoryTypeName(String categoryTypeName) {
+        this.categoryTypeName = categoryTypeName;
     }
 }

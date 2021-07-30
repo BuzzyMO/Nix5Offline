@@ -3,7 +3,6 @@ package org.example.finance.model;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "accounts")
@@ -22,8 +21,6 @@ public class Account {
     @JoinColumn(name = "user_id")
     @Access(AccessType.PROPERTY)
     private User user;
-
-    private BigDecimal money;
 
     public Long getId() {
         return id;
@@ -47,14 +44,6 @@ public class Account {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public BigDecimal getMoney() {
-        return money;
-    }
-
-    public void setMoney(BigDecimal money) {
-        this.money = money;
     }
 
     public String getName() {

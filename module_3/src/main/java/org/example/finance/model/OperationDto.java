@@ -2,7 +2,6 @@ package org.example.finance.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.Instant;
 
 public class OperationDto {
 

@@ -57,4 +57,12 @@ public class Operation {
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
 }

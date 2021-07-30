@@ -1,71 +1,64 @@
 package org.example.finance.model;
 
+import org.example.finance.annotation.CsvColumn;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class OperationDto {
 
-    private Long id;
-    private Long accountId;
-    private Long categoryId;
-    private String categoryName;
-    private String categoryTypeName;
-    private BigDecimal money;
-    private Timestamp timestamp;
+    @CsvColumn(colName = "ID")
+    public final Long id;
+    @CsvColumn(colName = "account_ID")
+    public final Long accountId;
+    @CsvColumn(colName = "Category_ID")
+    public final Long categoryId;
+    @CsvColumn(colName = "Category_Name")
+    public final String categoryName;
+    @CsvColumn(colName = "Category_Type_Name")
+    public final String categoryTypeName;
+    @CsvColumn(colName = "Money")
+    public final BigDecimal money;
+    @CsvColumn(colName = "Timestamp")
+    public final Timestamp timestamp;
+
+    public OperationDto(Long id, Long accountId, Long categoryId, String categoryName, String categoryTypeName, BigDecimal money, Timestamp timestamp) {
+        this.id = id;
+        this.accountId = accountId;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.categoryTypeName = categoryTypeName;
+        this.money = money;
+        this.timestamp = timestamp;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
 
     public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public BigDecimal getMoney() {
         return money;
-    }
-
-    public void setMoney(BigDecimal money) {
-        this.money = money;
     }
 
     public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getCategoryName() {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
     public String getCategoryTypeName() {
         return categoryTypeName;
-    }
-
-    public void setCategoryTypeName(String categoryTypeName) {
-        this.categoryTypeName = categoryTypeName;
     }
 }

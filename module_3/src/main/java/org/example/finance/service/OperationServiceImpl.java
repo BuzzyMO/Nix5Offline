@@ -1,6 +1,7 @@
 package org.example.finance.service;
 
 import com.opencsv.CSVWriter;
+import org.example.finance.CsvMapper;
 import org.example.finance.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,7 @@ public class OperationServiceImpl implements OperationService {
     private List<OperationDto> getOperations(Long accountId, LocalDateTime fromTime, LocalDateTime toTime){
         List<OperationDto> operations = new ArrayList<>();
         Connection connection = connectionSupplier.get();
-        String query = "SELECT o.id, o.account_id, o.category_id, c.name, ct.name, o.money, o.timestamp " +
+        String query = "SELECT o.id, o.category_id, c.name, ct.name, o.money, o.timestamp " +
                 "FROM operations o INNER JOIN categories c on c.id = o.category_id " +
                 "INNER JOIN category_types ct on ct.id = c.category_type_id " +
                 "WHERE o.account_id = ? AND o.timestamp BETWEEN ? AND ?";
@@ -91,14 +92,13 @@ public class OperationServiceImpl implements OperationService {
             statement.setTimestamp(3, Timestamp.from(toTime.toInstant(ZoneOffset.UTC)));
             ResultSet res = statement.executeQuery();
             while (res.next()){
-                OperationDto operation = new OperationDto();
-                operation.setId(res.getLong(1));
-                operation.setAccountId(res.getLong(2));
-                operation.setCategoryId(res.getLong(3));
-                operation.setCategoryName(res.getString(4));
-                operation.setCategoryTypeName(res.getString(5));
-                operation.setMoney(res.getBigDecimal(6));
-                operation.setTimestamp(res.getTimestamp(7));
+                Long id = res.getLong(1);
+                Long categoryId = res.getLong(2);
+                String categoryName = res.getString(3);
+                String categoryTypeName = res.getString(4);
+                BigDecimal money = res.getBigDecimal(5);
+                Timestamp timestamp = res.getTimestamp(6);
+                OperationDto operation = new OperationDto(id, accountId, categoryId, categoryName, categoryTypeName, money, timestamp);
                 operations.add(operation);
             }
         } catch (SQLException ex) {
@@ -109,15 +109,8 @@ public class OperationServiceImpl implements OperationService {
     }
 
     private String[] headerCsv(){
-        String[] header = new String[7];
-        header[0] = "ID";
-        header[1] = "Account ID";
-        header[2] = "Category ID";
-        header[3] = "Category Name";
-        header[4] = "Category Type";
-        header[5] = "Money";
-        header[6] = "Timestamp";
-        return header;
+        CsvMapper mapper = new CsvMapper();
+        return mapper.getHeaderCsv(OperationDto.class);
     }
 
     private String[] operationToStringArray(OperationDto operation){

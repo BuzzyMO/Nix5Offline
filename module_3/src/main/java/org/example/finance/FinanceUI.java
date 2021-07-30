@@ -72,10 +72,8 @@ public class FinanceUI {
         System.out.println("Enter date & time of operation:");
         String dateTimeString = reader.readLine();
         Instant dateTime = LocalDateTime.parse(dateTimeString).toInstant(ZoneOffset.UTC);
-        System.out.println("Is income operation? Type true or false");
-        Boolean isIncome = Boolean.valueOf(reader.readLine());
         LOGGER.info("Start create operation");
-        operationService.createOperation(Long.parseLong(accountId),Long.parseLong(categoryId), money, dateTime, isIncome);
+        operationService.createOperation(Long.parseLong(accountId),Long.parseLong(categoryId), money, dateTime);
         LOGGER.info("End create operation");
     }
 

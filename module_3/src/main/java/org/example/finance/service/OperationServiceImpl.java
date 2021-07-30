@@ -34,7 +34,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createOperation(Long accountId, Long categoryId, BigDecimal money, Instant timestamp, Boolean isIncome) {
+    public void createOperation(Long accountId, Long categoryId, BigDecimal money, Instant timestamp) {
         EntityManager entityManager = persistence.get();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -44,12 +44,7 @@ public class OperationServiceImpl implements OperationService {
             query.setParameter("accountId", accountId);
             query.setParameter("user", user);
             Account account = query.getSingleResult();
-            Category category;
-            if(isIncome){
-                category = entityManager.find(Income.class, categoryId);
-            } else {
-                category = entityManager.find(Expense.class, categoryId);
-            }
+            Category category = entityManager.find(Category.class, categoryId);
             Operation operation = new Operation();
             operation.setAccount(account);
             operation.setCategory(category);

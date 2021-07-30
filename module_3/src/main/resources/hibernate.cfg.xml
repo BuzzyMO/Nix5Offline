@@ -14,8 +14,7 @@
         <mapping class="org.example.finance.model.User"/>
         <mapping class="org.example.finance.model.Account"/>
         <mapping class="org.example.finance.model.Category"/>
-        <mapping class="org.example.finance.model.Expense"/>
-        <mapping class="org.example.finance.model.Income"/>
+        <mapping class="org.example.finance.model.CategoryType"/>
         <mapping class="org.example.finance.model.Operation"/>
     </session-factory>
 

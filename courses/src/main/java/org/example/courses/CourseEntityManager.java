@@ -1,44 +1,34 @@
 package org.example.courses;
 
 import org.example.courses.model.Lesson;
-import org.example.courses.model.LessonRegistration;
-import org.example.courses.model.Student;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.sql.Timestamp;
-import java.time.Clock;
-import java.util.Comparator;
-import java.util.List;
+import java.time.Instant;
 
 public class CourseEntityManager {
 
-    public void findAndPrintUpcomingLesson(EntityManager entityManager, Long studentId){
-        try{
+    public void findAndPrintUpcomingLesson(EntityManager entityManager, Long studentId) {
+        try {
             entityManager.getTransaction().begin();
-            Student student = entityManager.find(Student.class, studentId);
-            Lesson upcomingLesson = getUpcomingLesson(student.getLessonRegistrations());
+            TypedQuery<Lesson> query = entityManager.createQuery("SELECT l FROM Grade g " +
+                    "INNER JOIN Lesson l on l.id = g.lesson.id\n" +
+                    "INNER JOIN Student s on s.id = g.student.id\n" +
+                    "WHERE g.student.id =:studentId AND l.timestamp > :timestamp\n" +
+                    "ORDER BY l.timestamp", Lesson.class);
+            query.setParameter("studentId", studentId);
+            query.setParameter("timestamp", Timestamp.from(Instant.now()));
+            Lesson upcomingLesson = query.getSingleResult();
             System.out.println("Upcoming Lesson \n" +
-                    "Date and Time: " + upcomingLesson.getTimestamp() +"\n"+
+                    "Date and Time: " + upcomingLesson.getTimestamp() + "\n" +
                     "Topic: " + upcomingLesson.getTopic() + "\n" +
                     "Lecturer: " + upcomingLesson.getLecturer());
             entityManager.getTransaction().commit();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             entityManager.getTransaction().rollback();
             throw new RuntimeException(ex);
         }
 
-    }
-
-    private Lesson getUpcomingLesson(List<LessonRegistration> lessonRegistrations){
-        Timestamp currentTimestamp = new Timestamp(Clock.systemUTC().millis());
-        lessonRegistrations.sort(Comparator.comparing(a -> a.getLesson().getTimestamp()));
-        for(LessonRegistration lReg : lessonRegistrations){
-            Lesson lesson = lReg.getLesson();
-            Timestamp lessonTimestamp = lesson.getTimestamp();
-            if(lessonTimestamp.after(currentTimestamp)){
-                return lesson;
-            }
-        }
-        throw new RuntimeException("upcoming lesson isn't exists");
     }
 }

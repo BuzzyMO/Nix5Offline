@@ -1,8 +1,6 @@
 package org.example.courses.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "grades")
@@ -16,12 +14,15 @@ public class Grade {
 
     private Integer value;
 
-    @OneToMany(mappedBy = "grade")
-    private List<LessonRegistration> lessonRegistrations;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_id")
+    @Access(AccessType.PROPERTY)
+    private Lesson lesson;
 
-    public Grade(){
-        lessonRegistrations = new ArrayList<>();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    @Access(AccessType.PROPERTY)
+    private Student student;
 
     public Long getId() {
         return id;
@@ -47,16 +48,19 @@ public class Grade {
         this.value = value;
     }
 
-    public List<LessonRegistration> getLessonRegistrations() {
-        return lessonRegistrations;
+    public Lesson getLesson() {
+        return lesson;
     }
 
-    public void setLessonRegistrations(List<LessonRegistration> lessonRegistrations) {
-        this.lessonRegistrations = lessonRegistrations;
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
 
-    public void addLessonRegistration(LessonRegistration lessonRegistration){
-        lessonRegistrations.add(lessonRegistration);
-        lessonRegistration.setGrade(this);
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

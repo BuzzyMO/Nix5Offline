@@ -20,7 +20,7 @@ public class Lecturer {
     @OneToMany(mappedBy = "lecturer")
     private List<Lesson> lessons;
 
-    public Lecturer(){
+    public Lecturer() {
         lessons = new ArrayList<>();
     }
 
@@ -56,7 +56,7 @@ public class Lecturer {
         this.lessons = lessons;
     }
 
-    public void addLesson(Lesson lesson){
+    public void addLesson(Lesson lesson) {
         lessons.add(lesson);
         lesson.setLecturer(this);
     }

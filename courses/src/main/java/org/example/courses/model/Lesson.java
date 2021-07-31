@@ -2,7 +2,6 @@ package org.example.courses.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,11 +25,7 @@ public class Lesson {
     private Lecturer lecturer;
 
     @OneToMany(mappedBy = "lesson")
-    private List<LessonRegistration> lessonRegistrations;
-
-    public Lesson(){
-        lessonRegistrations = new ArrayList<>();
-    }
+    private List<Grade> grades;
 
     public Long getId() {
         return id;
@@ -64,16 +59,11 @@ public class Lesson {
         this.lecturer = lecturer;
     }
 
-    public List<LessonRegistration> getLessonRegistrations() {
-        return lessonRegistrations;
+    public List<Grade> getGrades() {
+        return grades;
     }
 
-    public void setLessonRegistrations(List<LessonRegistration> lessonRegistrations) {
-        this.lessonRegistrations = lessonRegistrations;
-    }
-
-    public void addLessonRegistration(LessonRegistration lessonRegistration){
-        lessonRegistrations.add(lessonRegistration);
-        lessonRegistration.setLesson(this);
+    public void setGrades(List<Grade> grades) {
+        this.grades = grades;
     }
 }

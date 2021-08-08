@@ -1,4 +1,4 @@
-package org.example.multithreading;
+package org.example.multithreading.greetingtask;
 
 public class HelloSpammer {
     private int counter = 0;
@@ -9,7 +9,7 @@ public class HelloSpammer {
     }
 
     private void printGreeting() {
-        if (counter < 48) {
+        if (counter < 50) {
             counter++;
             Thread thread = new Thread(this::printGreeting);
             thread.start();

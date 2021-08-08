@@ -1,4 +1,4 @@
-package org.example.multithreading;
+package org.example.multithreading.primenumbers;
 
 import java.math.BigInteger;
 import java.util.List;

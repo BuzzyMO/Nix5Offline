@@ -1,15 +1,24 @@
 package org.example.multithreading;
 
 public class HelloSpammer {
+    private int counter = 0;
 
-    public void start(){
-        for(int i = 0; i < 50; i++){
-            Thread thread = new Thread(this::printGreeting);
-            thread.start();
-        }
+    public void start() {
+        Thread thread = new Thread(this::printGreeting);
+        thread.start();
     }
 
-    private synchronized void printGreeting(){
-        System.out.println("Hello from thread" + " " + Thread.currentThread());
+    private void printGreeting() {
+        if (counter < 48) {
+            counter++;
+            Thread thread = new Thread(this::printGreeting);
+            thread.start();
+            try {
+                thread.join();
+                System.out.println("Hello from thread" + " " + Thread.currentThread());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
